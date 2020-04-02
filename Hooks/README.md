@@ -89,3 +89,5 @@ function useWindowWidth() {
 export default useWindowWidth
 // 이 커스텀훅을 사용할 component에서 import한 뒤에 const windowWidth = useWindowWidth();로 사용
 ```
+
+출처: <https://hyunseob.github.io/2019/06/02/react-component-the-right-way/>

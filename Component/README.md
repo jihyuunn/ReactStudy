@@ -95,4 +95,4 @@ console.log(inputRef.current)
 input태그의 placeholder, type등의 attributes와 tagName, innerHTML등 모두 얻을 수 있다   
 렌더링에 영향을 미치지 않지만, 각 노드 인스턴스별로 달라야하는 값을 저장할 때 useRef를 사용한다 State를 사용하면 값이 변할 때마다 렌더링 되기 때문   
 
-
+출처: <https://hyunseob.github.io/2019/06/02/react-component-the-right-way/>
