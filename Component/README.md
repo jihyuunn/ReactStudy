@@ -33,3 +33,44 @@ const SignUp = () => {
 
 ## Component 합성
 컴포넌트 상속이 지향되는 경우는 거의 없고 대부분의 경우가 합성으로 해결 가능하다   
+
+## Functional Component
+Hooks가 추가되면서 함수형 컴포넌트만으로 앱을 구성할 수 있게 되었다   
+
+## React.memo
+pure component의 함수형 버전을 사용하기 위해서는 함수형 컴포넌트를 react.memo로 감싸기만 하면 된다   
+(동작하는 방식이 함수형 프로그래밍의 memoization과 비슷하기 때문, 입력이 같으면 반환하는 값이 똑같다는 점을 이용해 한번 계산한 반환값을 저장하고 다음 입력이 들어올 때 저장된 값을 반환하는 것)   
+=> props와 state가 같으면 같은 렌더링 결과를 이용하는 것, 다만 저장했다가 반환하는 것이 아니라 렌더링을 새로 하지 않는 것   
+```javascript
+import React from 'react'
+function Input = ({ type, placeholder, value, onChange }) => {
+    return (
+        <input type={type} placeholder={placeholder} value={value} onChange={onChange}>
+    )
+};
+export default React.memo(Input)
+```
+
+## useCallback
+함수형 컴포넌트는 함수의 본문자체가 render 함수이기 때문에 이벤트핸들러를 어디서 만들던지 계속 새로운 함수를 만들게된다   
+(아까 pure component에 inline함수를 쓰면 계속 렌더링 되는 것과 같은 이유로..)   
+이 때 useCallback을 써주면 된다   
+```javascript
+function Form = () => {
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+    const emailHandler = useCallback(e => {setEmail(e.target.value)}, []);
+    const passwordHandler = useCallback(e => {setPassword(e.target.value), []});
+    const submitHandler = useCallback(e => {console.log(email, password), [email, password]});
+
+    render(
+        <form>
+            <Input type='email' placeholder='email' value={email} onChange={emailHadler}/>
+            <Input type='password' placeholder='password' value={password} onChange={passwordHadler}/>
+        </form>
+    )
+}
+```
+##### useCallback의 첫번째 인자는 클로져여서 이 함수가 생성될 때의 상태를 기억한다. 그래서 두번째 인자가 없으면 함수가 생성된 초기상태(e.g. 이메일과 패스워드가 null일 때)를 계속 기억한다. 두번째 인자인 dependency list에 의존 값을 넣어주면 이 리스트를 이전에 받은 값과 shallow compare로 비교해서 다르면 새로운 함수를 생성하고 같으면 함수생성 하지 않는다   
+
+
