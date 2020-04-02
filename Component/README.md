@@ -73,4 +73,26 @@ function Form = () => {
 ```
 ##### useCallback의 첫번째 인자는 클로져여서 이 함수가 생성될 때의 상태를 기억한다. 그래서 두번째 인자가 없으면 함수가 생성된 초기상태(e.g. 이메일과 패스워드가 null일 때)를 계속 기억한다. 두번째 인자인 dependency list에 의존 값을 넣어주면 이 리스트를 이전에 받은 값과 shallow compare로 비교해서 다르면 새로운 함수를 생성하고 같으면 함수생성 하지 않는다   
 
+## useMemo
+```javascript
+<Input type='email' placeholder='email' value={email} onChange={emailHadler} accessary={email !== "" && <button>X</button>}/> //1
+// VS
+const emailAccessary = useMemo(() => {
+    return email !== "" && <button>X</button>
+}, [email!==""])
+<Input type='email' placeholder='email' value={email} onChange={emailHadler} accessary={emailAccessary}/> //2
+```
+1번과 같이 코딩할 경우 계속해서 렌더 구문 안에서 새로운 React node가 생기기때문에 password를 타이핑해도 이메일 부분이 함께 새로 렌더링 된다   
+이를 막기 위해 useCallback과 동일한 방식으로 useMemo를 사용하면 된다   
+
+## useRef
+DOM 객체를 얻기 위해 사용   
+```javascript
+const inputRef = useRef(null)
+console.log(inputRef.current)
+<input ref={inputRef} type="email" placeholder="email" />
+```
+input태그의 placeholder, type등의 attributes와 tagName, innerHTML등 모두 얻을 수 있다   
+렌더링에 영향을 미치지 않지만, 각 노드 인스턴스별로 달라야하는 값을 저장할 때 useRef를 사용한다 State를 사용하면 값이 변할 때마다 렌더링 되기 때문   
+
 
